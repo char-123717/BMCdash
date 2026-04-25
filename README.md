@@ -91,9 +91,9 @@ Live Monitoring UI
 ## 🎯 Purpose
 
 This project is built to simulate basic BMC (Baseboard Management Controller) concepts:
--Server health monitoring
--Remote status visibility
--Real-time system updates
+- Server health monitoring
+- Remote status visibility
+- Real-time system updates
 
 It helps in understanding how enterprise server management systems (e.g., iLO / iDRAC) work at a simplified level.
 
