@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BMC Dashboard</title>
+    <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #0f172a;
+            color: white;
+            padding: 10px;
+        }
+
+        h1 {
+            font-size: 18px;
+            margin: 5px 0;
+        }
+
+        .container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .card {
+            background: #1e293b;
+            padding: 8px;
+            border-radius: 8px;
+            width: 120px;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .card h3 {
+            margin: 0 0 5px 0;
+            font-size: 12px;
+        }
+
+        .value {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .alert {
+            background: red;
+            padding: 8px;
+            margin-bottom: 10px;
+            display: none;
+            font-size: 12px;
+        }
+
+        h3 {
+            font-size: 14px;
+            margin: 8px 0;
+        }
+
+        canvas {
+            margin-top: 10px;
+            background: #111827;
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>🖥️ BMC Dashboard</h1>
+
+<div id="alert" class="alert">⚠️ SYSTEM ALERT</div>
+
+<div class="container">
+    <div class="card">
+        <h3>CPU</h3>
+        <div id="cpu" class="value">--</div>
+    </div>
+
+    <div class="card">
+        <h3>Memory</h3>
+        <div id="mem" class="value">--</div>
+    </div>
+
+    <div class="card">
+        <h3>Disk</h3>
+        <div id="disk" class="value">--</div>
+    </div>
+</div>
+
+<h3>CPU History</h3>
+<canvas id="chart" width="400" height="150"></canvas>
+
+<script>
+const socket = io("http://127.0.0.1:5000");
+const canvas = document.getElementById("chart");
+const ctx = canvas.getContext("2d");
+
+let cpuChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: [],
+        datasets: [{
+            label: 'CPU Usage (%)',
+            data: [],
+            borderColor: 'lime',
+            backgroundColor: 'rgba(0, 255, 0, 0.1)',
+            fill: true,
+            tension: 0.1,
+            pointRadius: 0
+        }, {
+            label: 'Trend (Moving Average)',
+            data: [],
+            borderColor: 'red',
+            backgroundColor: 'rgba(255, 0, 0, 0.1)',
+            fill: false,
+            tension: 0.1,
+            pointRadius: 0
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+
+                ticks: {
+                    color: 'white',
+                    callback: function(value, index, values) {
+                        return value + '%';
+                    },
+                    afterBuildTicks: function(axis) {
+                        axis.ticks = [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 10, 20, 40];
+                    },
+                    autoSkip: false,
+                    maxTicksLimit: 14
+                },
+                grid: {
+                    color: '#374151'
+                }
+            },
+            x: {
+                type: 'linear',
+                ticks: {
+                    color: 'white',
+                    callback: function(value, index, values) {
+                        const desired = [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 10, 20, 40];
+                        const timeInMinutes = value * 4 / 60; // assuming 4 seconds per point
+                        if (desired.includes(Math.round(timeInMinutes * 10) / 10)) {
+                            return timeInMinutes.toFixed(1) + 'm';
+                        }
+                        return '';
+                    }
+                },
+                grid: {
+                    color: '#374151'
+                }
+            }
+        },
+        plugins: {
+            legend: {
+                labels: {
+                    color: 'white'
+                }
+            }
+        }
+    }
+});
+
+socket.on("update", (msg) => {
+    const d = msg.data;
+
+    document.getElementById("cpu").innerText = d.cpu + "%";
+    document.getElementById("mem").innerText = d.memory + "%";
+    document.getElementById("disk").innerText = d.disk + "%";
+
+    // Alert
+    document.getElementById("alert").style.display =
+        msg.alert ? "block" : "none";
+
+    updateChart(d.history.cpu);
+});
+
+function updateChart(data) {
+    // Generate labels based on data length (time in minutes)
+    const labels = data.map((_, index) => index);
+    cpuChart.data.labels = labels;
+    cpuChart.data.datasets[0].data = data;
+
+    // Calculate moving average (window size 10)
+    const windowSize = 10;
+    const trend = [];
+    for (let i = 0; i < data.length; i++) {
+        const start = Math.max(0, i - windowSize + 1);
+        const end = i + 1;
+        const sum = data.slice(start, end).reduce((a, b) => a + b, 0);
+        trend.push(sum / (end - start));
+    }
+    cpuChart.data.datasets[1].data = trend;
+
+    cpuChart.update();
+}
+</script>
+
+</body>
+</html>
