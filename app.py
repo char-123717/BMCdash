@@ -1,7 +1,8 @@
-from flask import Flask
+from flask import Flask, send_from_directory
 from flask_socketio import SocketIO
 from monitor import get_system_status
 import time
+import os
 
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*", async_mode="threading")
@@ -10,15 +11,8 @@ def background_task():
     while True:
         data = get_system_status()
 
-        alert = (
-            data["cpu"] > 80 or
-            data["memory"] > 80 or
-            data["disk"] > 80
-        )
-
         socketio.emit("update", {
-            "data": data,
-            "alert": alert
+            "data": data
         })
 
         time.sleep(3)
@@ -26,7 +20,7 @@ def background_task():
 
 @app.route("/")
 def index():
-    return "BMC Monitor Running"
+    return send_from_directory(os.path.dirname(__file__), "static/dashboard.html")
 
 
 if __name__ == "__main__":

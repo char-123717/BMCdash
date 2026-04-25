@@ -43,14 +43,6 @@
             font-weight: bold;
         }
 
-        .alert {
-            background: red;
-            padding: 8px;
-            margin-bottom: 10px;
-            display: none;
-            font-size: 12px;
-        }
-
         h3 {
             font-size: 14px;
             margin: 8px 0;
@@ -68,8 +60,6 @@
 <body>
 
 <h1>🖥️ BMC Dashboard</h1>
-
-<div id="alert" class="alert">⚠️ SYSTEM ALERT</div>
 
 <div class="container">
     <div class="card">
@@ -92,7 +82,7 @@
 <canvas id="chart" width="400" height="150"></canvas>
 
 <script>
-const socket = io("http://127.0.0.1:5000");
+const socket = io(window.location.origin);
 const canvas = document.getElementById("chart");
 const ctx = canvas.getContext("2d");
 
@@ -172,10 +162,6 @@ socket.on("update", (msg) => {
     document.getElementById("cpu").innerText = d.cpu + "%";
     document.getElementById("mem").innerText = d.memory + "%";
     document.getElementById("disk").innerText = d.disk + "%";
-
-    // Alert
-    document.getElementById("alert").style.display =
-        msg.alert ? "block" : "none";
 
     updateChart(d.history.cpu);
 });

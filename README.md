@@ -1,4 +1,4 @@
-# 🖥️ Linux Server Health Monitor (BMC-like System)
+# 🖥️ Server Health Monitor (BMC-like System)
 
 A lightweight BMC-like system built with Python, Flask, and WebSocket to simulate real-time server health monitoring, including CPU, memory, and disk usage visualization.
 
@@ -8,7 +8,6 @@ A lightweight BMC-like system built with Python, Flask, and WebSocket to simulat
 
 - 📊 Real-time system monitoring (CPU / Memory / Disk)
 - 🔄 Live updates using WebSocket (no refresh needed)
-- ⚠️ Alert system for high resource usage
 - 📈 Simple CPU history visualization
 - 🌐 Web dashboard for system status
 - 🧠 Simulates basic BMC (Baseboard Management Controller) behavior
@@ -42,7 +41,7 @@ linux-bmc-monitor/
 ## ⚙️ Installation
 
 ### 1. Clone repository
-```bash
+```
 git clone https://github.com/char-123717/BMCdash.git
 ```
 ### 2. Install dependencies
@@ -58,11 +57,12 @@ Then open browser:
 ```
 http://127.0.0.1:5000/static/dashboard.html
 ```
+---
 
-### 📡 API Endpoint
+## 📡 API Endpoint
 
 Get system status
-GET /api/status
+-GET /api/status
 
 Example response:
 ```
@@ -72,8 +72,9 @@ Example response:
   "disk": 70.5
 }
 ```
+---
 
-### 🧠 Architecture Overview
+## 🧠 Architecture Overview
 ```
 System Metrics (psutil)
         ↓
@@ -86,26 +87,18 @@ Frontend Dashboard
 Live Monitoring UI
 ```
 
-### ⚠️ Alert System
-
-Triggers alert when:
-
-CPU > 80%
-Memory > 80%
-Disk > 80%
-
-### 🎯 Purpose
+---
+## 🎯 Purpose
 
 This project is built to simulate basic BMC (Baseboard Management Controller) concepts:
-
-Server health monitoring
-Remote status visibility
-Real-time system updates
+-Server health monitoring
+-Remote status visibility
+-Real-time system updates
 
 It helps in understanding how enterprise server management systems (e.g., iLO / iDRAC) work at a simplified level.
 
-
-### 📌 Future Improvements
+---
+## 📌 Future Improvements
 🔐 Login authentication (like real BMC)
 📡 Redfish API simulation
 📊 Chart.js advanced visualization
@@ -115,6 +108,7 @@ It helps in understanding how enterprise server management systems (e.g., iLO / 
 
 Built by a Computer Science student exploring systems, Linux, and backend engineering.
 
+---
 ### 📜 License
 
 This project is for educational purposes.
