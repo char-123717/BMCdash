@@ -74,7 +74,7 @@ Example response:
 ```
 
 ### 🧠 Architecture Overview
-
+```
 System Metrics (psutil)
         ↓
 Python Backend (Flask)
@@ -84,7 +84,9 @@ WebSocket (real-time push)
 Frontend Dashboard
         ↓
 Live Monitoring UI
-⚠️ Alert System
+```
+
+### ⚠️ Alert System
 
 Triggers alert when:
 
