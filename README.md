@@ -99,12 +99,14 @@ It helps in understanding how enterprise server management systems (e.g., iLO / 
 
 ---
 ## 📌 Future Improvements
-🔐 Login authentication (like real BMC)
-📡 Redfish API simulation
-📊 Chart.js advanced visualization
-🐳 Docker deployment
-🖥️ Multi-server monitoring
-👨‍💻 Author
+- 🔐 Login authentication (like real BMC)
+- 📡 Redfish API simulation
+- 📊 Chart.js advanced visualization
+- 🐳 Docker deployment
+- 🖥️ Multi-server monitoring
+---
+
+## 👨‍💻 Author
 
 Built by a Computer Science student exploring systems, Linux, and backend engineering.
 
