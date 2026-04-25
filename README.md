@@ -26,7 +26,7 @@ A lightweight BMC-like system built with Python, Flask, and WebSocket to simulat
 ---
 
 ## 🏗️ Project Structure
-
+```
 
 linux-bmc-monitor/
 │
@@ -36,7 +36,7 @@ linux-bmc-monitor/
 │ └── dashboard.html # Frontend dashboard UI
 └── requirements.txt
 
-
+```
 ---
 
 ## ⚙️ Installation
